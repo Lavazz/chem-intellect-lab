@@ -5,4 +5,5 @@ public record ReagentCreateRequestDto(
         String formula,
         String casNumber,
         String description
-) {}
+) {
+}

@@ -10,7 +10,5 @@ import java.util.UUID;
 
 @Repository
 public interface ReagentRepository extends JpaRepository<Reagent, UUID> {
-    // Дополнительные методы для поиска можно добавить при необходимости
-    // Пример поиска реагента по CAS номеру
     Optional<Reagent> findByCasNumber(String casNumber);
 }

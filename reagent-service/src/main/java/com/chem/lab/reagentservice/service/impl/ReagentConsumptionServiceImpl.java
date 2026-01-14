@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -46,10 +45,8 @@ public class ReagentConsumptionServiceImpl implements ReagentConsumptionService 
     public List<ReagentConsumptionResponseDto> getByReagent(UUID reagentId) {
         log.info("Fetching consumptions for reagent {}", reagentId);
 
-        // Получаем все записи расхода для данного реагента
         List<ReagentConsumption> consumptions = consumptionRepository.findByReagentId(reagentId);
 
-        // Преобразуем их в DTO
         return consumptions.stream()
                 .map(consumption -> new ReagentConsumptionResponseDto(
                         consumption.getId(),
@@ -59,17 +56,15 @@ public class ReagentConsumptionServiceImpl implements ReagentConsumptionService 
                         consumption.getExperimentId(),
                         consumption.getConsumedAt()
                 ))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
     public List<ReagentConsumptionResponseDto> getByExperiment(UUID experimentId) {
         log.info("Fetching consumptions for experiment {}", experimentId);
 
-        // Получаем все записи расхода для данного эксперимента
         List<ReagentConsumption> consumptions = consumptionRepository.findByExperimentId(experimentId);
 
-        // Преобразуем их в DTO
         return consumptions.stream()
                 .map(consumption -> new ReagentConsumptionResponseDto(
                         consumption.getId(),
@@ -79,6 +74,6 @@ public class ReagentConsumptionServiceImpl implements ReagentConsumptionService 
                         consumption.getExperimentId(),
                         consumption.getConsumedAt()
                 ))
-                .collect(Collectors.toList());
+                .toList();
     }
 }

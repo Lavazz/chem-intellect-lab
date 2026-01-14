@@ -15,13 +15,13 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class ReagentStockServiceImpl implements ReagentStockService {
 
+    private static final String GRAM = "g";
     private final ReagentStockRepository stockRepository;
     private final ReagentEventProducer kafkaProducer;
 
@@ -54,21 +54,21 @@ public class ReagentStockServiceImpl implements ReagentStockService {
                         stock.getUnit(),
                         stock.getReceivedAt(),
                         stock.getActive()))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
     public ReagentAvailabilityResponseDto checkAvailability(UUID reagentId, Double required) {
         log.info("Checking availability for reagent {}", reagentId);
 
-        Double total = stockRepository.sumActiveQuantity(reagentId);
+        Double total = stockRepository.sumQuantityByReagentId(reagentId);
 
         boolean enough = total != null && total >= required;
 
         return new ReagentAvailabilityResponseDto(
                 reagentId,
                 total == null ? 0.0 : total,
-                "g",
+                GRAM,
                 enough
         );
     }
